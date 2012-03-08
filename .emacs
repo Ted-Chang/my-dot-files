@@ -132,6 +132,8 @@
 
 ;; shell
 ;; use `C-u M-x shell' to start another shell
+;; make our shell support ANSI color
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 (defun clear-shell()
   (interactive)
   (let ((old-max comint-buffer-maximum-size))
@@ -235,3 +237,6 @@
   (interactive)
   (kill-buffer nil))
 (global-set-key (kbd "C-x k") 'my-kill-this-buffer)
+
+;; query replace
+(global-set-key (kbd "M-#") 'query-replace-regexp)
