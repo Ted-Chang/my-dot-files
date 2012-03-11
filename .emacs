@@ -1,5 +1,15 @@
 ;; Copyright (C) 2012 Ted Chang. All rights reserved
 ;; E-mail: zgk_1208@yahoo.com.cn
+;; 
+;; This file is distributed in the hope that it will be
+;; useful, but WITHOUT ANY WARRANTY; without even the implied
+;; warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+;; PURPOSE.
+
+(message "* --[ Loading my Emacs init file ]--")
+
+;; uptimes
+(setq emacs-load-start-time (current-time))
 
 ;; backup~ file settings
 (setq make-backup-files t)
@@ -8,6 +18,29 @@
 ;; add a new load path
 (let ((default-directory "~/.emacs.d/lisp/"))
   (normal-top-level-add-subdirs-to-load-path))
+
+(defvar missing-package-list nil
+  "List of packages that `try-require' can't find.")
+
+;; attempt to load a feature/library, failing silently
+(defun try-require(feature)
+  "Attempt to load a library or module. Return true if the library
+given as argument is successfully loaded. If not, instead of an error,
+just add the package to a list of missing packages."
+  (condition-case err
+      ;; protected from
+      (progn
+	(message "checking for library `%s' ..." feature)
+	(if (stringp feature)
+	    (load-library feature)
+	  (require feature))
+	(message "checking for library `%s' ... found" feature))
+    ;; error handler
+    (file-error	; condition
+     (progn
+       (message "checking for library `%s' ... missing" feature)
+       (add-to-list 'missing-package-list feature 'append))
+     nil)))
 
 ;; UI
 ;; turn off the menu mode
@@ -24,6 +57,7 @@
 
 ;; show line number
 (global-linum-mode t)
+(message "UI initialization... Done")
 
 ;; font settings
 ;; use `C-x C-+' `C-x C--' to resize (zoom) the buffer text
@@ -78,9 +112,9 @@
 
 ;; color-theme
 ;; set the color theme at the very beginning
-(require 'color-theme)
-(color-theme-initialize)
-(color-theme-dark-blue2)
+(when (try-require 'color-theme)
+  (color-theme-initialize)
+  (color-theme-dark-blue2))
 
 ;; minibuffer
 ;; enable switching between buffers using substring
@@ -90,12 +124,21 @@
 ;; do not consider case significant in completion
 (setq read-buffer-completion-ignore-case t)
 (auto-insert-mode t)
+(message "The Minibuffer... Done")
 
 ;; don't add newline to end of buffer when scrolling
 (setq next-line-add-newlines nil)
 
 ;; buffer menu for buffer switch
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
+;; kill buffer
+;; replace the original kill buffer with my kill buffer
+(defun my-kill-this-buffer()
+  "Kill the buffer without confirmation (if not modified)"
+  (interactive)
+  (kill-buffer nil))
+(global-set-key (kbd "C-x k") 'my-kill-this-buffer)
+(message "Using multiple buffer... Done")
 
 ;; goto the specified line
 (global-set-key (kbd "M-g") 'goto-line)
@@ -173,26 +216,9 @@
 ;; each command that sets a bookmark will also save your bookmarks
 (setq bookmark-save-flag 1)
 
-;; CEDET configuration
-;; I use the CEDET come with the emacs instead of the stand-alone one
-(require 'cedet)
-(global-ede-mode t)		; Enable the project management system
-(semantic-mode t)
-(setq semantic-default-submodes '(global-semantic-idle-scheduler-mode
-				  global-semanticdb-minor-mode
-				  global-semantic-idle-summary-mode
-				  global-semantic-mru-bookmark-mode))
-(defun my-cedet-hook()
-  ;; Jump to the definition
-  (local-set-key (kbd "C-c j") 'semantic-ia-fast-jump)
-  (local-set-key (kbd "C-c s") 'semantic-ia-show-summary)
-  (local-set-key (kbd "C-c p") 'semantic-analyze-proto-impl-toggle)
-)
-(add-hook 'c-mode-common-hook 'my-cedet-hook)
-
 ;; Speedbar configuration
 ;; use sr-speedbar-toggle to open the speedbar
-(require 'sr-speedbar)
+(try-require 'sr-speedbar)
 
 ;; auto-complet configuration
 (require 'auto-complete-config)
@@ -221,6 +247,7 @@
 	      '(emacs-lisp-mode scheme-mode lisp-mode c-mode c++-mode
 				latex-mode python-mode))
       (indent-region (region-beginning) (region-end) nil)))
+(message "Yanking... Done")
 
 ;; search and replacement
 (defun isearch-occur ()
@@ -229,14 +256,46 @@
   (let ((case-fold-search isearch-case-fold-search))
     (occur (if isearch-regexp isearch-string (regexp-quote isearch-string)))))
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
-
-;; kill buffer
-;; replace the original kill buffer with my kill buffer
-(defun my-kill-this-buffer()
-  "Kill the buffer without confirmation (if not modified)"
-  (interactive)
-  (kill-buffer nil))
-(global-set-key (kbd "C-x k") 'my-kill-this-buffer)
-
 ;; query replace
 (global-set-key (kbd "M-#") 'query-replace-regexp)
+(message "Search and replacement... Done")
+
+;; Automatically reload files was modified by external program
+(global-auto-revert-mode t)
+;; and display a message to notify the user
+(defun inform-revert-modified-file (&optional p1 p2)
+  "my custom function"
+  (let ((revert-buffer-function nil))
+    (revert-buffer p1 p2)
+    (message "File `%s' automatically reverted" buffer-file-name)))
+(setq revert-buffer-function 'inform-revert-modified-file)
+
+;; CEDET configuration
+;; I use the CEDET come with the emacs instead of the stand-alone one
+(require 'cedet)
+(global-ede-mode t)		; Enable the project management system
+(semantic-mode t)
+(setq semantic-default-submodes '(global-semantic-idle-scheduler-mode
+				  global-semanticdb-minor-mode
+				  global-semantic-idle-summary-mode
+				  global-semantic-mru-bookmark-mode))
+(defun my-cedet-hook()
+  ;; Jump to the definition
+  (local-set-key (kbd "C-c j") 'semantic-ia-fast-jump)
+  (local-set-key (kbd "C-c s") 'semantic-ia-show-summary)
+  (local-set-key (kbd "C-c p") 'semantic-analyze-proto-impl-toggle)
+  )
+(add-hook 'c-mode-common-hook 'my-cedet-hook)
+(message "Editing programs... Done")
+
+;; full name of this user
+(setq user-full-name "Ted Chang")
+
+;; full mailing address of this user
+;; (used in MAIL envelope FORM, and to select the default personality ID)
+(setq user-mail-address
+      (concat (rot13-string "zgk_1208") "@" "yahoo.com.cn"))
+
+;; Debugging
+(if missing-package-list
+    (progn (message "Packages not found: %S" missing-package-list)))
