@@ -130,6 +130,7 @@ just add the package to a list of missing packages."
 (setq next-line-add-newlines nil)
 
 ;; buffer menu for buffer switch
+(global-set-key (kbd "<f10>") 'rename-buffer)
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
 ;; kill buffer
 ;; replace the original kill buffer with my kill buffer
@@ -176,7 +177,8 @@ just add the package to a list of missing packages."
 ;; shell
 ;; use `C-u M-x shell' to start another shell
 ;; make our shell support ANSI color
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on t)
 (defun clear-shell()
   (interactive)
   (let ((old-max comint-buffer-maximum-size))
