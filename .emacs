@@ -176,6 +176,8 @@ just add the package to a list of missing packages."
 ;; cycle through all windows on current frame
 (global-set-key (kbd "<f6>") 'other-window)
 ;; enlarge or shrink windows more easily than with `C-x {' and the like
+(global-set-key (kbd "C-{") 'shrink-window-horizontally)
+(global-set-key (kbd "C-}") 'enlarge-window-horizontally)
 
 ;; shell
 ;; use `C-u M-x shell' to start another shell
