@@ -173,6 +173,9 @@ just add the package to a list of missing packages."
 (when (fboundp 'winner-mode)
   (winner-mode)
   (windmove-default-keybindings))
+;; cycle through all windows on current frame
+(global-set-key (kbd "<f6>") 'other-window)
+;; enlarge or shrink windows more easily than with `C-x {' and the like
 
 ;; shell
 ;; use `C-u M-x shell' to start another shell
@@ -312,6 +315,9 @@ just add the package to a list of missing packages."
   )
 (add-hook 'c-mode-common-hook 'my-cedet-hook)
 (message "Editing programs... Done")
+
+(when (try-require 'quick-jump)
+  (quick-jump-default-keybinding))
 
 ;; full name of this user
 (setq user-full-name "Ted Chang")
