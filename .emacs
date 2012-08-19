@@ -95,7 +95,7 @@ just add the package to a list of missing packages."
 (defun-prefix-alt shk-tabbar-next (tabbar-forward-tab) (tabbar-forward-group) (tabbar-mode 1))
 (defun-prefix-alt shk-tabbar-prev (tabbar-backward-tab) (tabbar-backward-group) (tabbar-mode 1))
 (global-set-key (kbd "<C-tab>") 'shk-tabbar-next)
-(global-set-key (kbd "<C-S-iso-lefttab>") 'shk-tabbar-prev)
+(global-set-key (kbd "<C-S-tab>") 'shk-tabbar-prev)
 
 ;; move through camelCaseWords
 (global-subword-mode 1)
