@@ -181,6 +181,7 @@ just add the package to a list of missing packages."
 
 ;; shell
 ;; use `C-u M-x shell' to start another shell
+;; use `C-c C-c' to interrupt the shell or its current subjob
 ;; make our shell support ANSI color
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on t)
