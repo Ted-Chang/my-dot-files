@@ -199,6 +199,7 @@ just add the package to a list of missing packages."
 
 ;; CC-mode configuration http://cc-mode.sourceforge.net
 ;; use `M-i' to insert a tab
+;; set indent-tabs-mode to nil if you want spaces instead of tabs
 (require 'cc-mode)
 (defun my-c-mode-common-hook()
   (setq c-basic-offset 8
