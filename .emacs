@@ -202,6 +202,7 @@ just add the package to a list of missing packages."
 ;; set indent-tabs-mode to nil if you want spaces instead of tabs
 (require 'cc-mode)
 (defun my-c-mode-common-hook()
+  (c-set-offset 'substatement-open 0)
   (setq c-basic-offset 8
 	tab-width 8
 	indent-tabs-mode t)
