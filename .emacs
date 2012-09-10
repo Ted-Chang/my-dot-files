@@ -131,7 +131,11 @@ just add the package to a list of missing packages."
 
 ;; buffer menu for buffer switch
 (global-set-key (kbd "<f10>") 'rename-buffer)
-(global-set-key (kbd "C-x C-b") 'buffer-menu)
+;;(global-set-key (kbd "C-x C-b") 'buffer-menu)
+;; `buffer-menu' moves point in the window which list your buffers
+;; `electric-buffer-list' pops up a buffer describing the set of buffers
+(global-set-key (kbd "C-x C-b") 'electric-buffer-list)
+
 ;; kill buffer
 ;; replace the original kill buffer with my kill buffer
 (defun my-kill-this-buffer()
@@ -201,7 +205,7 @@ just add the package to a list of missing packages."
 ;; use `M-i' to insert a tab
 ;; set indent-tabs-mode to nil if you want spaces instead of tabs
 (require 'cc-mode)
-(defun my-c-mode-common-hook()
+(defun my-c-mode-hook()
   (c-set-offset 'substatement-open 0)
   (setq c-basic-offset 8
 	tab-width 8
@@ -210,12 +214,13 @@ just add the package to a list of missing packages."
   ;; auto indent the new line
   (local-set-key (kbd "RET") 'newline-and-indent)
 )
-(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+(add-hook 'c-mode-hook 'my-c-mode-hook)
+(add-hook 'c++-mode-hook 'my-c-mode-hook)
 
 ;; text-mode
 (defun my-text-mode-hook()
   "Turn on filling mode in text mode"
-  (turn-on-auto-fill))
+  ;;(turn-on-auto-fill))
 (add-hook 'text-mode-hook 'my-text-mode-hook)
 
 ;; cua-seletion-mode
@@ -334,6 +339,11 @@ just add the package to a list of missing packages."
 
 (when (try-require 'quick-jump)
   (quick-jump-default-keybinding))
+
+;; offer save of `*scratch*' buffer on exit
+(save-excursion
+  (set-buffer "*scratch*")
+  (setq buffer-file-name "~/*scratch*"))
 
 ;; full name of this user
 (setq user-full-name "Ted Chang")
