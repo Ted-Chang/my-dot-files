@@ -220,7 +220,8 @@ just add the package to a list of missing packages."
 ;; text-mode
 (defun my-text-mode-hook()
   "Turn on filling mode in text mode"
-  ;;(turn-on-auto-fill))
+  ;;(turn-on-auto-fill)
+)
 (add-hook 'text-mode-hook 'my-text-mode-hook)
 
 ;; cua-seletion-mode
