@@ -280,6 +280,17 @@ just add the package to a list of missing packages."
 				latex-mode python-mode))
       (indent-region (region-beginning) (region-end) nil)))
 ;; interactively insert items from kill ring
+(when (try-require 'browse-kill-ring)
+  ;; string separating entries in the `separated' style
+  (setq browse-kill-ring-separator
+	"\n---separator------------------------------")
+  ;; temporarily highlight the inserted `kill-ring' entry
+  (setq browse-kill-ring-highlight-inserted-item t)
+  ;; face in which to highlight the `browse-kill-ring-separator'
+  (defface separator-face '((t (:foreground "Blueviolet" :weight bold))) nil)
+  (setq browse-kill-ring-separator-face 'separator-face)
+  ;; use `M-y' to invoke `browse-kill-ring'
+  (browse-kill-ring-default-keybindings))
 (message "Yanking... Done")
 
 ;; search and replacement
