@@ -63,6 +63,9 @@ just add the package to a list of missing packages."
 ;; use `C-x C-+' `C-x C--' to resize (zoom) the buffer text
 ;;(set-face-attribute 'default nil :font "Courier New-10")
 
+;; quiet, no dingding!
+(setq visual-bell nil)
+
 ;; maximizing emacs on startup in Windows
 (defun maximize-frame()
   "Maximize the active frame in Windows"
