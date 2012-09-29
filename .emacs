@@ -419,7 +419,13 @@ just add the package to a list of missing packages."
 
 ;; Ctags cnofiguration
 ;; The ctags here is ExuberantCtags, not the ctags in the Emacs bin directory
-(setq path-to-ctags "/usr/bin/ctags") ;; <-- your ctags path here
+;; Use visit-tags-table to load the tags file
+;; `M-.' (`find-tag')
+;; `M-*' (`pop-tag-mark')
+(GNULinux
+  (setq path-to-ctags "/usr/bin/ctags")) ;; <-- your ctags path here
+(Windows
+  (setq path-to-ctags "\"C:/Program Files (x86)/ctags58/ctags\""))
 (defun create-tags (dir-name)
   "Create tags file."
   (interactive "DDirectory: ")
