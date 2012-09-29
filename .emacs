@@ -418,12 +418,12 @@ just add the package to a list of missing packages."
 (message "Editing programs... Done")
 
 ;; Ctags cnofiguration
-(setq path-to-ctags "usr/bin/ctags")	;; <-- Your ctags path here
+;; You need to set the PATH environment variable anyway
 (defun create-tags (dir-name)
   "Create tags file."
   (interactive "Project Directory: ")
   (shell-command 
-   (format "%s -f %s/TAGS -e -R %s" path-to-ctags dir-name (directory-file-name dir-name))))
+   (format "ctags -f %s/TAGS -e -R %s" dir-name (directory-file-name dir-name))))
 
 (when (try-require 'quick-jump)
   (quick-jump-default-keybinding))
