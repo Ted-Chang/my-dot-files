@@ -418,12 +418,13 @@ just add the package to a list of missing packages."
 (message "Editing programs... Done")
 
 ;; Ctags cnofiguration
-;; You need to set the PATH environment variable anyway
+;; The ctags here is ExuberantCtags, not the ctags in the Emacs bin directory
+(setq path-to-ctags "/usr/bin/ctags") ;; <-- your ctags path here
 (defun create-tags (dir-name)
   "Create tags file."
-  (interactive "Project Directory: ")
+  (interactive "DDirectory: ")
   (shell-command 
-   (format "ctags -f %s/TAGS -e -R %s" dir-name (directory-file-name dir-name))))
+   (format "%s -f %s/TAGS -e -R %s" path-to-ctags dir-name (directory-file-name dir-name))))
 
 (when (try-require 'quick-jump)
   (quick-jump-default-keybinding))
