@@ -11,6 +11,25 @@
 ;; uptimes
 (setq emacs-load-start-time (current-time))
 
+;; Environment
+(defvar running-ms-windows
+  (eq system-type 'windows-nt))
+
+(defvar running-ms-windows
+  (string-match "windows" (prin1-to-string system-type)))
+
+(defvar running-gnu-linux
+  (string-match "linux" (prin1-to-string system-type)))
+
+;; OS type --- are we running GNU Linux?
+(defmacro GNULinux (&rest body)
+  (list 'if (string-match "linux" (prin1-to-string system-type))
+	(cons 'progn body)))
+
+(defmacro Windows (&rest body)
+  (list 'if (string-match "windows" (prin1-to-string system-type))
+	(cons 'progn body)))
+
 ;; backup~ file settings
 (setq make-backup-files t)
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
@@ -98,7 +117,11 @@ just add the package to a list of missing packages."
 (defun-prefix-alt shk-tabbar-next (tabbar-forward-tab) (tabbar-forward-group) (tabbar-mode 1))
 (defun-prefix-alt shk-tabbar-prev (tabbar-backward-tab) (tabbar-backward-group) (tabbar-mode 1))
 (global-set-key (kbd "<C-tab>") 'shk-tabbar-next)
-(global-set-key (kbd "<C-S-tab>") 'shk-tabbar-prev)
+;; On my notebook <C-S-tab> not work in Fedora 16
+(GNULinux
+ (global-set-key (kbd "<C-S-iso-lefttab>") 'shk-tabbar-prev))
+(Windows
+ (global-set-key (kbd "<C-S-tab>") 'shk-tabbar-prev))
 
 ;; move through camelCaseWords
 (global-subword-mode 1)
@@ -187,12 +210,12 @@ just add the package to a list of missing packages."
   (interactive "p")
   (move-line (if (null n) 1 n)))
 
-;; undo some previous changes
-(global-set-key (kbd "<f11>") 'undo)
+(global-set-key (kbd "<M-up>") 'move-line-up)
+(global-set-key (kbd "<M-down>") 'move-line-down)
 
 ;; redo the most recent undo
 (when (try-require 'redo+)
-  (global-set-key (kbd "<S-f11>") 'redo))
+  (global-set-key (kbd "C-?") 'redo))
 
 ;; recent file
 ;; keep a list of recently opened files
@@ -338,6 +361,22 @@ just add the package to a list of missing packages."
   ;; use `M-y' to invoke `browse-kill-ring'
   (browse-kill-ring-default-keybindings))
 (message "Yanking... Done")
+
+;; using cursor color to indicate some modes (read-only, insert and
+;; overwrite modes)
+(setq my-set-cursor-color-color "")
+(setq my-set-cursor-color-buffer "")
+(defun my-set-cursor-color-according-to-mode ()
+  "Change cursor color according to some minor modes."
+  (let ((color
+	 (if buffer-read-only "yellow"
+	   (if overwrite-mode "red"
+	     "#15FF00"))))	; insert mode
+    (unless (and (string= color my-set-cursor-color-color)
+		 (string= (buffer-name) my-set-cursor-color-buffer))
+      (set-cursor-color (setq my-set-cursor-color-color color))
+      (setq my-set-cursor-color-buffer (buffer-name)))))
+(add-hook 'post-command-hook 'my-set-cursor-color-according-to-mode)
 
 ;; search and replacement
 (defun isearch-occur ()
