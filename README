@@ -1,1 +1,9 @@
 The emacs init file contained in this project is tested only in Windows and Linux with EMACS 23.3.1. You need to download the libraries/modules yourself. After you downloaded the libraries/modules, put them into the .emacs.d/lisp of your home dir. If you don't have lisp in .emacs.d, you have to create one. They will be loaded by the emacs when it was launched.
+Here is a list of libraries/modules I have used:
+auto-complete
+browse-kill-ring
+color-theme
+quick-jump
+redo+
+sr-speedbar
+tabbar
