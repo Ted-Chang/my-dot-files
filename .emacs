@@ -417,6 +417,14 @@ just add the package to a list of missing packages."
 (add-hook 'c-mode-common-hook 'my-cedet-hook)
 (message "Editing programs... Done")
 
+;; Ctags cnofiguration
+(setq path-to-ctags "usr/bin/ctags")	;; <-- Your ctags path here
+(defun create-tags (dir-name)
+  "Create tags file."
+  (interactive "Project Directory: ")
+  (shell-command 
+   (format "%s -f %s/TAGS -e -R %s" path-to-ctags dir-name (directory-file-name dir-name))))
+
 (when (try-require 'quick-jump)
   (quick-jump-default-keybinding))
 
