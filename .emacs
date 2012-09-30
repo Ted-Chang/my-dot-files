@@ -118,10 +118,11 @@ just add the package to a list of missing packages."
 (defun-prefix-alt shk-tabbar-prev (tabbar-backward-tab) (tabbar-backward-group) (tabbar-mode 1))
 (global-set-key (kbd "<C-tab>") 'shk-tabbar-next)
 ;; On my notebook <C-S-tab> not work in Fedora 16
-(GNULinux
- (global-set-key (kbd "<C-S-iso-lefttab>") 'shk-tabbar-prev))
-(Windows
- (global-set-key (kbd "<C-S-tab>") 'shk-tabbar-prev))
+(cond
+ (running-gnu-linux
+  (global-set-key (kbd "<C-S-iso-lefttab>") 'shk-tabbar-prev))
+ (running-ms-windows
+  (global-set-key (kbd "<C-S-tab>") 'shk-tabbar-prev)))
 
 ;; move through camelCaseWords
 (global-subword-mode 1)
@@ -399,6 +400,56 @@ just add the package to a list of missing packages."
     (message "File `%s' automatically reverted" buffer-file-name)))
 (setq revert-buffer-function 'inform-revert-modified-file)
 
+;; Dired configurations
+;; Try to guess a default target directory
+(setq dired-dwim-target t)
+
+;; Enable the use of the command `dired-find-alternate-file'
+;; without confirmation
+(put 'dired-find-alternate-file 'disabled nil)
+
+;; Copy recursively without asking
+(setq dired-recursive-copies 'always)
+
+;; Make dired use the same buffer for viewing directory, instead
+;; of spawning may
+(add-hook 'dired-mode-hook
+	  (lambda ()
+	    (define-key dired-mode-map (kbd "<RET>")
+	      'dired-find-alternate-file)	; was dired-advertised-find-file
+	    (define-key dired-mode-map (kbd "^")
+	      (lambda () (interactive) (find-alternate-file ".."))))
+	    ; was dired-up-directory
+)
+(defun open-in-desktop ()
+  "Open the current file's folder in desktop."
+  (interactive)
+  (cond
+   ((running-ms-windows) (w32-shell-execute "explore" "."))))
+(message "Dired... Done")
+
+;; Openning files in external apps
+(defun open-in-external-app ()
+  "Open the current file or dired marked files in external app.
+Works in Microsoft Windows and Linux."
+  (interactive)
+  (let (doIt
+	(myFileList
+	 (cond
+	  ((string-equal major-mode "dired-mode") (dired-get-marked-files))
+	  (t (list (buffer-file-name))) ) ) ) 
+    (setq doIt (if (<= (length myFileList) 5)
+		   t
+		 (y-or-n-p "Open more than 5 files?")))
+    (when doIt
+      (cond
+       (running-ms-windows
+	(mapc (lambda (fPath) (w32-shell-execute "open" (replace-regexp-in-string "/" "\\" fPath t t)) ) myFileList)
+	)
+       (running-gnu-linux
+	(mapc (lambda (fPath) (let ((process-connection-type nil)) (start-process "" nil "xdg-open" fPath)) ) myFileList)))))
+)
+
 ;; CEDET configuration
 ;; I use the CEDET come with the emacs instead of the stand-alone one
 (require 'cedet)
@@ -422,15 +473,37 @@ just add the package to a list of missing packages."
 ;; Use visit-tags-table to load the tags file
 ;; `M-.' (`find-tag')
 ;; `M-*' (`pop-tag-mark')
-(GNULinux
+(cond
+ (running-gnu-linux
   (setq path-to-ctags "/usr/bin/ctags")) ;; <-- your ctags path here
-(Windows
-  (setq path-to-ctags "\"C:/Program Files (x86)/ctags58/ctags\""))
+ (running-ms-windows
+  (setq path-to-ctags "\"C:/Program Files (x86)/ctags58/ctags\"")))
 (defun create-tags (dir-name)
   "Create tags file."
   (interactive "DDirectory: ")
   (shell-command 
    (format "%s -f %s/TAGS -e -R %s" path-to-ctags dir-name (directory-file-name dir-name))))
+(defun find-file-upwards (file-to-find)
+  "Recursively searches each parent directory starting from the default-directory.
+looking for a file with name file-to-find. Returns the path to it or nil if not 
+found."
+  (labels
+      ((find-file-r (path)
+		    (let* ((parent (file-name-directory path))
+			   (possible-file (concat parent file-to-find)))
+		      (cond
+		       ((file-exists-p possible-file) possible-file)	; Found
+		       ;; The parent of ~ is nil and the parent of / is itself.
+		       ;; Thus the terminating condition for not finding the file
+		       ;; accounts for both.
+		       ((or (null parent) (equal parent (directory-file-name parent))) nil)	; Not found
+		       (t (find-file-r (directory-file-name parent)))))))	; Continue
+    (find-file-r default-directory)))
+(let ((my-tags-file (find-file-upwards "TAGS")))
+  (when my-tags-file
+    (message "Loading tags file: %s" my-tags-file)
+    (visit-tags-table my-tags-file)))
+(message "ctags... Done")
 
 (when (try-require 'quick-jump)
   (quick-jump-default-keybinding))
