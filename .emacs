@@ -403,14 +403,11 @@ just add the package to a list of missing packages."
 ;; Dired configurations
 ;; Try to guess a default target directory
 (setq dired-dwim-target t)
-
 ;; Enable the use of the command `dired-find-alternate-file'
 ;; without confirmation
 (put 'dired-find-alternate-file 'disabled nil)
-
 ;; Copy recursively without asking
 (setq dired-recursive-copies 'always)
-
 ;; Make dired use the same buffer for viewing directory, instead
 ;; of spawning may
 (add-hook 'dired-mode-hook
@@ -421,13 +418,6 @@ just add the package to a list of missing packages."
 	      (lambda () (interactive) (find-alternate-file ".."))))
 	    ; was dired-up-directory
 )
-(defun open-in-desktop ()
-  "Open the current file's folder in desktop."
-  (interactive)
-  (cond
-   ((running-ms-windows) (w32-shell-execute "explore" "."))))
-(message "Dired... Done")
-
 ;; Openning files in external apps
 (defun open-in-external-app ()
   "Open the current file or dired marked files in external app.
@@ -449,6 +439,7 @@ Works in Microsoft Windows and Linux."
        (running-gnu-linux
 	(mapc (lambda (fPath) (let ((process-connection-type nil)) (start-process "" nil "xdg-open" fPath)) ) myFileList)))))
 )
+(message "Dired... Done")
 
 ;; CEDET configuration
 ;; I use the CEDET come with the emacs instead of the stand-alone one
