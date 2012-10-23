@@ -442,21 +442,9 @@ Works in Microsoft Windows and Linux."
 (message "Dired... Done")
 
 ;; CEDET configuration
-;; I use the CEDET come with the emacs instead of the stand-alone one
-(require 'cedet)
-(global-ede-mode t)		; Enable the project management system
-(semantic-mode t)
-(setq semantic-default-submodes '(global-semantic-idle-scheduler-mode
-				  global-semanticdb-minor-mode
-				  global-semantic-idle-summary-mode
-				  global-semantic-mru-bookmark-mode))
-(defun my-cedet-hook()
-  ;; Jump to the definition
-  (local-set-key (kbd "C-c j") 'semantic-ia-fast-jump)
-  (local-set-key (kbd "C-c s") 'semantic-ia-show-summary)
-  (local-set-key (kbd "C-c p") 'semantic-analyze-proto-impl-toggle)
-  )
-(add-hook 'c-mode-common-hook 'my-cedet-hook)
+;; TODO: Make a better choice here
+(when (try-require 'cedet)
+)
 (message "Editing programs... Done")
 
 ;; Ctags cnofiguration
@@ -495,6 +483,9 @@ found."
     (message "Loading tags file: %s" my-tags-file)
     (visit-tags-table my-tags-file)))
 (message "ctags... Done")
+
+;; Show the function name at mode line
+(which-function-mode t)
 
 (when (try-require 'quick-jump)
   (quick-jump-default-keybinding))
