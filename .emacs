@@ -83,7 +83,7 @@ just add the package to a list of missing packages."
 ;;(set-face-attribute 'default nil :font "Courier New-10")
 
 ;; quiet, no dingding!
-(setq visual-bell nil)
+(setq visible-bell t)
 
 ;; maximizing emacs on startup in Windows
 (defun maximize-frame()
