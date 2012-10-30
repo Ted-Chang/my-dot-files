@@ -124,6 +124,15 @@ just add the package to a list of missing packages."
  (running-ms-windows
   (global-set-key (kbd "<C-S-tab>") 'shk-tabbar-prev)))
 
+;; interactively do things
+(ido-mode 1)
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+
+;; make tooltips appear in the echo area
+(tooltip-mode 1)
+(setq tooltip-use-echo-area t)
+
 ;; move through camelCaseWords
 (global-subword-mode 1)
 
@@ -173,7 +182,8 @@ just add the package to a list of missing packages."
 (message "Using multiple buffer... Done")
 
 ;; goto the specified line
-(global-set-key (kbd "M-g") 'goto-line)
+;; `M-g M-p' and `M-g M-n' is useful in compile mode
+(global-set-key (kbd "M-g M-g") 'goto-line)
 
 ;; eleminate long "yes" or "no" prompts
 (fset 'yes-or-no-p 'y-or-n-p)
