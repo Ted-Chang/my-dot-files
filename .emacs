@@ -452,8 +452,48 @@ Works in Microsoft Windows and Linux."
 (message "Dired... Done")
 
 ;; CEDET configuration
-;; TODO: Make a better choice here
 (when (try-require 'cedet)
+  (setq semantic-default-submodes '(global-semantic-idle-summary-mode
+				    global-semantic-idle-scheduler-mode
+				    global-semantic-idle-completions-mode
+				    global-semanticdb-minor-mode
+				    global-semantic-mru-bookmark-mode))
+  (semantic-mode t)
+  (defconst user-include-dirs
+    (list "../include" "../inc"
+	  "../../include" "../../inc"))
+  (defconst wdk-include-dirs
+    (list "C:/WinDDK/7600.16385.1/inc/ddk"
+	  "C:/WinDDK/7600.16385.1/inc/crt"))
+  (let ((include-dirs user-include-dirs))
+    (cond 
+     (running-ms-windows
+      (setq include-dirs (append include-dirs wdk-include-dirs))))
+    (mapc (lambda (dir)
+	    (semantic-add-system-include dir 'c++-mode)
+	    (semantic-add-system-include dir 'c-mode))
+	  include-dirs))
+  (defadvice push-mark (around semantic-mru-bookmark activate)
+    "Push a mark at LOCATION with NOMSG and ACTIVATE passed to `push mark'"
+    (semantic-mrub-push semantic-mru-bookmark-ring
+			(point)
+			'mark)
+    ad-do-it)
+  (defun my-semantic-ia-fast-jump()
+    (interactive)
+    (semantic-ia-fast-jump (point)))
+  (defun my-semantic-ia-fast-jump-back() 
+    (interactive)
+    (if (ring-empty-p (oref semantic-mru-bookmark-ring ring))
+	(error "Semantic Book ring is currently empty"))
+    (let* ((ring (oref semantic-mru-bookmark-ring ring))
+	   (alist (semantic-mrub-ring-to-assoc-list ring))
+	   (first (cdr (car alist))))
+      (if (semantic-equivalent-tag-p (oref first tag) (semantic-current-tag))
+	  (setq first (cdr (car (cdr alist)))))
+      (semantic-mrub-switch-tags first)))
+  (global-set-key (kbd "C-c j") 'my-semantic-ia-fast-jump)
+  (global-set-key (kbd "C-c b") 'my-semantic-ia-fast-jump-back)
 )
 (message "Editing programs... Done")
 
