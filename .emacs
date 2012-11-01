@@ -390,12 +390,7 @@ just add the package to a list of missing packages."
 (add-hook 'post-command-hook 'my-set-cursor-color-according-to-mode)
 
 ;; search and replacement
-(defun isearch-occur ()
-  "Invoke `occur' from within isearch"
-  (interactive)
-  (let ((case-fold-search isearch-case-fold-search))
-    (occur (if isearch-regexp isearch-string (regexp-quote isearch-string)))))
-(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+;; isearch-occur is replaced with `M-s o' starting with Emacs 23
 ;; query replace
 (global-set-key (kbd "M-#") 'query-replace-regexp)
 (message "Search and replacement... Done")
