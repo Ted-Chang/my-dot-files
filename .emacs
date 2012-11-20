@@ -311,12 +311,13 @@ just add the package to a list of missing packages."
 (try-require 'sr-speedbar)
 
 ;; auto-complet configuration
-(require 'auto-complete-config)
-(global-auto-complete-mode t)
-(ac-config-default)	; Use default configuration for auto complete
-(setq ac-auto-start t)
-(setq ac-dwim t)	; To get pop-ups with docs even if a word is uniquely complete
-(setq ac-use-menu-map t)
+(when (try-require 'auto-complete-config)
+  (global-auto-complete-mode t)
+  (ac-config-default)	; Use default configuration for auto complete
+  (setq ac-dwim t)	; To get pop-ups with docs even if a word is uniquely complete
+  (setq ac-use-menu-map t)
+  (setq ac-auto-start 4)
+)
 
 ;; Visual white space configuration
 (require 'whitespace)
