@@ -210,19 +210,38 @@ just add the package to a list of missing packages."
       ;; restore point to original column in moved line
       (forward-line -1)
       (forward-char col))))
-
 (defun move-line-up (n)
   "Move the current line up by N lines."
   (interactive "p")
   (move-line (if (null n) -1 (- n))))
-
 (defun move-line-down (n)
   "Move the current line down by N lines."
   (interactive "p")
   (move-line (if (null n) 1 n)))
-
 (global-set-key (kbd "<M-up>") 'move-line-up)
 (global-set-key (kbd "<M-down>") 'move-line-down)
+
+;; Behave like VI's o command
+(defun open-next-line (arg)
+  "Move to the next line and then opens a new line."
+  (interactive "P")
+  (next-line 1)
+  (beginning-of-line)
+  (open-line arg)
+  (when newline-and-indent
+    (indent-according-to-mode))
+)
+;; Behave like VI's O command
+(defun open-prev-line (arg)
+  "Open a new line before the current line."
+  (interactive "P")
+  (beginning-of-line)
+  (open-line arg)
+  (when newline-and-indent
+    (indent-according-to-mode))
+)
+(global-set-key (kbd "C-o") 'open-next-line)
+(global-set-key (kbd "M-o") 'open-prev-line)
 
 ;; redo the most recent undo
 (when (try-require 'redo+)
