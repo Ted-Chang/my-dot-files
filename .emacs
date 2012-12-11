@@ -63,7 +63,7 @@ just add the package to a list of missing packages."
 
 ;; UI
 ;; turn off the menu mode
-;(menu-bar-mode -1)
+(menu-bar-mode -1)
 
 ;; turn off the toobar mode
 (tool-bar-mode -1)
