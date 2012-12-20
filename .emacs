@@ -466,39 +466,6 @@ Works in Microsoft Windows and Linux."
 )
 (message "Dired... Done")
 
-;; CEDET configuration
-(when (try-require 'cedet)
-  (setq semantic-default-submodes '(global-semanticdb-minor-mode
-				    global-semantic-mru-bookmark-mode))
-  (semantic-mode t)
-  (defvar user-include-dirs 
-    '("../include" "../inc"
-      "../../include" "../../inc"
-      "C:/WinDDK/7600.16385.1/inc/ddk"))
-  (mapc (lambda (dir)
-	  (semantic-add-system-include dir 'c++-mode)
-	  (semantic-add-system-include dir 'c-mode))
-	user-include-dirs)
-  (defadvice push-mark (around semantic-mru-bookmark activate)
-    "Push a mark at LOCATION with NOMSG and ACTIVATE passed to `push mark'"
-    (semantic-mrub-push semantic-mru-bookmark-ring
-			(point)
-			'mark)
-    ad-do-it)
-  (defun my-semantic-ia-fast-jump-back() 
-    (interactive)
-    (if (ring-empty-p (oref semantic-mru-bookmark-ring ring))
-	(error "Semantic Bookmark ring is currently empty"))
-    (let* ((ring (oref semantic-mru-bookmark-ring ring))
-	   (alist (semantic-mrub-ring-to-assoc-list ring))
-	   (first (cdr (car alist))))
-      (semantic-mrub-visit first)
-      (ring-remove ring 0)))
-  (global-set-key (kbd "C-c j") 'semantic-ia-fast-jump)
-  (global-set-key (kbd "C-c b") 'my-semantic-ia-fast-jump-back)
-)
-(message "Editing programs... Done")
-
 ;; Ctags cnofiguration
 ;; The ctags here is ExuberantCtags, not the ctags in the Emacs bin directory
 ;; Use visit-tags-table to load the tags file
