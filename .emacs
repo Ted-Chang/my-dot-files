@@ -483,6 +483,14 @@ Works in Microsoft Windows and Linux."
    (format "%s -f %s/TAGS -e -R %s" path-to-ctags dir-name (directory-file-name dir-name))))
 (message "ctags... Done")
 
+;; Cscope configuration
+(when (try-require 'xcscope)
+  ;; By default, xcscope.el does automatic indexing by use of a Bash script(cscope-indexer).
+  ;; As Windows lacks Bash support, so disable it
+  ;; cscope command: cscope -b -k -R
+  (setq cscope-do-not-update-database t))
+(message "cscope... Done")
+
 ;; Show the function name at mode line
 (which-function-mode t)
 
