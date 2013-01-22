@@ -466,27 +466,18 @@ Works in Microsoft Windows and Linux."
 )
 (message "Dired... Done")
 
-;; Ctags cnofiguration
-;; The ctags here is ExuberantCtags, not the ctags in the Emacs bin directory
-;; Use visit-tags-table to load the tags file
-;; `M-.' (`find-tag')
-;; `M-*' (`pop-tag-mark')
-(cond
- (running-gnu-linux
-  (setq path-to-ctags "/usr/bin/ctags")) ;; <-- your ctags path here
- (running-ms-windows
-  (setq path-to-ctags "\"C:/Program Files (x86)/ctags58/ctags\"")))
-(defun create-tags (dir-name)
-  "Create tags file."
-  (interactive "DDirectory: ")
-  (shell-command 
-   (format "%s -f %s/TAGS -e -R %s" path-to-ctags dir-name (directory-file-name dir-name))))
-(message "ctags... Done")
-
 ;; Cscope configuration
 (when (try-require 'xcscope)
-  ;; By default, xcscope.el does automatic indexing by use of a Bash script(cscope-indexer).
-  ;; As Windows lacks Bash support, so disable it
+  ;; By default, xcscope.el does automatic indexing by use of a Bash 
+  ;; script(cscope-indexer). As Windows lacks Bash support, so disable it.
+  ;; Usage:
+  ;; >PROJ=/home/project
+  ;; >find "$PROJ/include" "$PROJ/module1" "$PROJ/module2" \
+  ;; > -name "*.[ch]*" -print > "$PROJ/cscope.files"
+  ;; >cd "$PROJ"
+  ;; >cscope -b -q -k
+  ;; Or
+  ;; >cscope -b -k -R -I incdir -s srcdir
   ;; cscope command: cscope -b -k -R
   (setq cscope-do-not-update-database t))
 (message "cscope... Done")
