@@ -75,7 +75,8 @@ just add the package to a list of missing packages."
 (global-font-lock-mode t)
 
 ;; show line number
-(global-linum-mode t)
+(when (try-require 'linum)
+  (global-linum-mode t))
 (message "UI initialization... Done")
 
 ;; font settings
