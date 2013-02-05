@@ -63,13 +63,13 @@ just add the package to a list of missing packages."
 
 ;; UI
 ;; turn off the menu mode
-(menu-bar-mode -1)
+(if (functionp 'menu-bar-mode) (menu-bar-mode -1))
 
 ;; turn off the toobar mode
-(tool-bar-mode -1)
+(if (functionp 'tool-bar-mode) (tool-bar-mode -1))
 
 ;; turn off the scroll bar
-(scroll-bar-mode -1)
+(if (functionp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 ;; turn on syntax coloring
 (global-font-lock-mode t)
@@ -131,8 +131,9 @@ just add the package to a list of missing packages."
 (setq ido-everywhere t)
 
 ;; make tooltips appear in the echo area
-(tooltip-mode 1)
-(setq tooltip-use-echo-area t)
+(when (try-require 'tooltip-mode)
+  (tooltip-mode 1)
+  (setq tooltip-use-echo-area t))
 
 ;; move through camelCaseWords
 (global-subword-mode 1)
