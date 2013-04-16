@@ -181,6 +181,11 @@ just add the package to a list of missing packages."
   (interactive)
   (kill-buffer nil))
 (global-set-key (kbd "C-x k") 'my-kill-this-buffer)
+(defun my-kill-all-buffers()
+  "Kill all buffers"
+  (interactive)
+  (mapc 'kill-buffer (buffer-list)))
+(global-set-key (kbd "C-x K") 'my-kill-all-buffers)
 (message "Using multiple buffer... Done")
 
 ;; goto the specified line
