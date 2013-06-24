@@ -506,7 +506,7 @@ Works in Microsoft Windows and Linux."
 ;; full mailing address of this user
 ;; (used in MAIL envelope FORM, and to select the default personality ID)
 (setq user-mail-address
-      (concat (rot13-string "zgk_1208") "@" "yahoo.com.cn"))
+      (concat (rot13-string "ted.g.chang") "@" "gmail.com"))
 
 ;; Debugging
 (if missing-package-list
