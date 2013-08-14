@@ -1,5 +1,5 @@
 ;; Copyright (C) 2012 Ted Chang. All rights reserved
-;; E-mail: zgk_1208@yahoo.com.cn
+;; E-mail: ted.g.chang@gmail.com
 ;; 
 ;; This file is distributed in the hope that it will be
 ;; useful, but WITHOUT ANY WARRANTY; without even the implied
