@@ -97,27 +97,27 @@ just add the package to a list of missing packages."
 (add-hook 'window-setup-hook 'maximize-frame t)
 
 ;; tabbar configuration
-(require 'tabbar)
-(tabbar-mode)
-(setq tabbar-buffer-groups-function
-      (lambda ()
-	(list "All Buffers")))
-(setq tabbar-buffer-list-function
-      (lambda ()
-	(remove-if
-	 (lambda (buffer)
-	   (find (aref(buffer-name buffer) 0) " *"))
-	 (buffer-list))))
-(defmacro defun-prefix-alt (name on-no-prefix on-prefix &optional do-always)
-  `(defun ,name (arg)
-     (interactive "P")
-     ,do-always
-     (if (equal nil arg)
-	 ,on-no-prefix
-       ,on-prefix)))
-(defun-prefix-alt shk-tabbar-next (tabbar-forward-tab) (tabbar-forward-group) (tabbar-mode 1))
-(defun-prefix-alt shk-tabbar-prev (tabbar-backward-tab) (tabbar-backward-group) (tabbar-mode 1))
-(global-set-key (kbd "<C-tab>") 'shk-tabbar-next)
+(when (try-require 'tabbar)
+  (tabbar-mode)
+  (setq tabbar-buffer-groups-function
+	(lambda ()
+	  (list "All Buffers")))
+  (setq tabbar-buffer-list-function
+	(lambda ()
+	  (remove-if
+	   (lambda (buffer)
+	     (find (aref(buffer-name buffer) 0) " *"))
+	   (buffer-list))))
+  (defmacro defun-prefix-alt (name on-no-prefix on-prefix &optional do-always)
+    `(defun ,name (arg)
+       (interactive "P")
+       ,do-always
+       (if (equal nil arg)
+	   ,on-no-prefix
+	 ,on-prefix)))
+  (defun-prefix-alt shk-tabbar-next (tabbar-forward-tab) (tabbar-forward-group) (tabbar-mode 1))
+  (defun-prefix-alt shk-tabbar-prev (tabbar-backward-tab) (tabbar-backward-group) (tabbar-mode 1))
+  (global-set-key (kbd "<C-tab>") 'shk-tabbar-next))
 ;; On my laptop <C-S-tab> not work in Fedora 16
 (cond
  (running-gnu-linux
