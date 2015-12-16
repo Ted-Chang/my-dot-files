@@ -501,12 +501,12 @@ Works in Microsoft Windows and Linux."
   (setq buffer-file-name "~/*scratch*"))
 
 ;; full name of this user
-(setq user-full-name "Ted Chang")
+(setq user-full-name "Ted Zhang")
 
 ;; full mailing address of this user
 ;; (used in MAIL envelope FORM, and to select the default personality ID)
 (setq user-mail-address
-      (concat (rot13-string "ted.g.chang") "@" "gmail.com"))
+      (concat (rot13-string "ted.g.zhang") "@" "live.com"))
 
 ;; Debugging
 (if missing-package-list
