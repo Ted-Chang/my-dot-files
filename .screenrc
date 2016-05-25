@@ -12,3 +12,11 @@ bindkey -d -k kb
 ## do not trash Delete, usually ESC [ 3 ~
 bindkey -k kD
 bindkey -d -k kD
+
+#
+## no startup message
+startup_message off
+
+#
+## always use a login shell
+shell -$SHELL

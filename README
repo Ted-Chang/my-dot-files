@@ -9,3 +9,5 @@ Here is a list of libraries/modules I have used:
 * tabbar
 
 The screen init file was tested with screen 4.03.01
+
+The screen.sh init script was tested with my LFS.
