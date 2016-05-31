@@ -1,0 +1,29 @@
+# Options for all hosts
+Host *
+     # Allow access to X11 display
+     ForwardX11Trusted yes
+
+     # First use the user's key (if it exists)
+     IdentityFile ~/.ssh/id_rsa
+
+     # Also try the widely used key to log into systems
+     IdentityFile /etc/ssh/id_rsa.root
+
+     # Keep connections alive, and detect when systems go down
+     ServerAliveInterval 60
+
+     # This enables sending locale environment variables LC_* LANG
+     SendEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+     SendEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+     SendEnv LC_IDENTIFICATION LC_ALL
+
+# For any hostname we recognized, log in as root by default, and do not
+# complain about the host key changing
+Host VM-*
+     User root
+     StrictHostKeyChecking no
+
+# If we use an IP address, it might not be a recognized system, but at least
+# do not complain about the host key changing
+Host 192.*
+     StrictHostKeyChecking no
