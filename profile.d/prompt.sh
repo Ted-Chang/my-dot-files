@@ -8,7 +8,7 @@ if [ "$PS1" ]; then
     if [[ $EUID == 0 ]]; then
         PS1="$RED\h:\w\\$ $NORMAL"
     else
-        PS1="\u@h:\w\\$ "
+        PS1="\u@\h:\w\\$ "
     fi
 
     unset NORMAL RED
