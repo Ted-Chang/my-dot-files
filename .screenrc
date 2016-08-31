@@ -1,22 +1,20 @@
-#
-## Control-^ (usually Control-Shift-6) is traditional and the only key not
-## used by EMACS
+# Control-^ (usually Control-Shift-6) is traditional and the only key not
+# used by EMACS
 escape ^^^^
 
-#
-## do not trash BackSpace, usually DEL
+# do not trash BackSpace, usually DEL
 bindkey -k kb
 bindkey -d -k kb
 
-#
-## do not trash Delete, usually ESC [ 3 ~
+# do not trash Delete, usually ESC [ 3 ~
 bindkey -k kD
 bindkey -d -k kD
 
-#
-## no startup message
+# no startup message
 startup_message off
 
-#
-## always use a login shell
+# always use a login shell
 shell -$SHELL
+
+# detach on hangup
+autodetach on
