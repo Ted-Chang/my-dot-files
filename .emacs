@@ -135,9 +135,6 @@ just add the package to a list of missing packages."
   (tooltip-mode 1)
   (setq tooltip-use-echo-area t))
 
-;; move through camelCaseWords
-(global-subword-mode 1)
-
 ;; turn on paren match highlighting
 (show-paren-mode 1)
 (setq show-paren-ring-bell-on-mismatch t)

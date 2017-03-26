@@ -27,3 +27,8 @@ Host VM-*
 # do not complain about the host key changing
 Host 192.*
      StrictHostKeyChecking no
+
+# Personal remote host
+Host VM-Ted
+     HostName 192.168.234.10
+     User Ted
