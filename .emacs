@@ -21,6 +21,9 @@
 (defvar running-gnu-linux
   (string-match "linux" (prin1-to-string system-type)))
 
+(defvar running-macos
+  (eq system-type 'darwin))
+
 ;; OS type --- are we running GNU Linux?
 (defmacro GNULinux (&rest body)
   (list 'if (string-match "linux" (prin1-to-string system-type))
@@ -118,6 +121,14 @@ just add the package to a list of missing packages."
   (defun-prefix-alt shk-tabbar-next (tabbar-forward-tab) (tabbar-forward-group) (tabbar-mode 1))
   (defun-prefix-alt shk-tabbar-prev (tabbar-backward-tab) (tabbar-backward-group) (tabbar-mode 1))
   (global-set-key (kbd "<C-tab>") 'shk-tabbar-next))
+
+;; Mac OS key binding
+(cond
+ (running-macos
+  (setq mac-option-modifier 'alt)
+  (setq mac-command-modifier 'meta)
+  (global-set-key [kp-delete] 'delete-char)))
+
 ;; On my laptop <C-S-tab> not work in Fedora 16
 (cond
  (running-gnu-linux
