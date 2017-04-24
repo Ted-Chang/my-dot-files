@@ -1,0 +1,18 @@
+#!/usr/bin/expect
+
+if {[llength $argv] != 2} {
+    puts "usage: ssh.exp hostname jumpbox"
+    exit 1
+}
+
+set timeout 30
+set hostname [lindex $argv 0]
+set jumpbox [lindex $argv 1]
+spawn ssh $jumpbox
+expect {
+    "(yes/no)?"
+    {send "yes\n";exp_continue}
+    "server ip*"
+    {send "$hostname\n"}
+}
+interact
