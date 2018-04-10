@@ -326,9 +326,15 @@ just add the package to a list of missing packages."
 (add-hook 'c++-mode-hook 'my-c-mode-hook)
 
 ;; text-mode
+(defun hide-dos-eol()
+  "Do not show ^M in files containing mixed UNIX and DOS line endings."
+  (interactive)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M []))
 (defun my-text-mode-hook()
   "Turn on filling mode in text mode"
   ;;(turn-on-auto-fill)
+  ;;(hide-dos-eol)
 )
 (add-hook 'text-mode-hook 'my-text-mode-hook)
 
@@ -439,47 +445,6 @@ just add the package to a list of missing packages."
     (revert-buffer p1 p2)
     (message "File `%s' automatically reverted" buffer-file-name)))
 (setq revert-buffer-function 'inform-revert-modified-file)
-
-;; Dired configurations
-;; Try to guess a default target directory
-(setq dired-dwim-target t)
-;; Enable the use of the command `dired-find-alternate-file'
-;; without confirmation
-(put 'dired-find-alternate-file 'disabled nil)
-;; Copy recursively without asking
-(setq dired-recursive-copies 'always)
-;; Make dired use the same buffer for viewing directory, instead
-;; of spawning may
-(add-hook 'dired-mode-hook
-	  (lambda ()
-	    (define-key dired-mode-map (kbd "<RET>")
-	      'dired-find-alternate-file)	; was dired-advertised-find-file
-	    (define-key dired-mode-map (kbd "^")
-	      (lambda () (interactive) (find-alternate-file ".."))))
-	    ; was dired-up-directory
-)
-;; Openning files in external apps
-(defun open-in-external-app ()
-  "Open the current file or dired marked files in external app.
-Works in Microsoft Windows and Linux."
-  (interactive)
-  (let (doIt
-	(myFileList
-	 (cond
-	  ((string-equal major-mode "dired-mode") (dired-get-marked-files))
-	  (t (list (buffer-file-name))) ) ) ) 
-    (setq doIt (if (<= (length myFileList) 5)
-		   t
-		 (y-or-n-p "Open more than 5 files?")))
-    (when doIt
-      (cond
-       (running-ms-windows
-	(mapc (lambda (fPath) (w32-shell-execute "open" (replace-regexp-in-string "/" "\\" fPath t t)) ) myFileList)
-	)
-       (running-gnu-linux
-	(mapc (lambda (fPath) (let ((process-connection-type nil)) (start-process "" nil "xdg-open" fPath)) ) myFileList)))))
-)
-(message "Dired... Done")
 
 ;; Cscope configuration
 (when (try-require 'xcscope)
