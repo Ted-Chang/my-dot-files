@@ -1,2 +1,2 @@
---memcheck:leak-check=yes
+--memcheck:leak-check=full
 --track-fds=yes

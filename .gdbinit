@@ -11,6 +11,11 @@ set history filename ~/.gdb_history
 set history save on
 set history size 8192
 
+set print pretty on
+
+# Enable auto load .gdbinit in project path
+set auto-load safe-path /
+
 # Disable pagination
 set pagination off
 
