@@ -9,7 +9,7 @@ set verbose off
 set filename-display basename
 set history filename ~/.gdb_history
 set history save on
-set history size 8192
+set history size 16384
 
 set print pretty on
 
