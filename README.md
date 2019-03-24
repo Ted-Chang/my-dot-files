@@ -5,7 +5,7 @@
 $ make help
 Avaiable make targets:
 
-install - install the start up files
+install - install all the start up files
 help    - print this help info
 ```
 
@@ -15,5 +15,5 @@ $ make install
 ```
 
 **Attention:**  
-For .bashrc and prompt.sh we will backup if the files already exist.  
+For .bashrc we will backup if it already exist.  
 For other files we will just overwrite them.  
