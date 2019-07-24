@@ -6,6 +6,7 @@ set prompt \033[31m(gdb) \033[0m
 set confirm off
 set verbose off
 
+set editing-mode emacs
 set filename-display basename
 set history filename ~/.gdb_history
 set history save on
