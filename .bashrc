@@ -29,3 +29,5 @@ if [ "$PS1" ]; then
     unset NORMAL RED
 fi
 
+# No window
+alias emacs='emacs -nw'
